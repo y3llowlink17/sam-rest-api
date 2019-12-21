@@ -29,10 +29,11 @@ Resources:
       Handler: get.handler
       Policies: AmazonDynamoDBReadOnlyAccess  # IAM policy document object | SAM policy template # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#properties
       Events:
-        Type: Api
-        Properties:
-          Path: /user/{userid}
-          Method: get
+        GetUserApi:
+          Type: Api
+          Properties:
+            Path: /user/{userid}
+            Method: get
 
   PostUser:
     Type: AWS::Serverless::Function
@@ -40,10 +41,11 @@ Resources:
       Handler: post.handler
       Policies: AmazonDynamoDBFullAccess
       Events:
-        Type: Api
-        Properties:
-          Path: /user/{userid}
-          Method: post
+        PostUserApi:
+          Type: Api
+          Properties:
+            Path: /user/{userid}
+            Method: post
 
   DeleteUser:
     Type: AWS::Serverless::Function
@@ -51,7 +53,8 @@ Resources:
       Handler: delete.handler
       Policies: AmazonDynamoDBFullAccess
       Events:
-        Type: Api
-        Properties:
-          Path: /user/{userid}
-          Method: delete
+        DeleteUserApi:
+          Type: Api
+          Properties:
+            Path: /user/{userid}
+            Method: delete
