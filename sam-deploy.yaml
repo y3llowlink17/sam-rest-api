@@ -14,38 +14,50 @@ Resources:
   Table:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: sam-rest-api
+      TableName: sam-rest-api-TestPolicy
       PrimaryKey:
         Name: userid
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-  GetUser:
+  GetUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: get.handler
-      Policies: AmazonDynamoDBReadOnlyAccess
+      Policies:
+      - Statement:
+        - Sid: dynamoDBGetItemSAMRestAPI
+          Effect: Allow
+          Action:
+          - dynamodb:GetItem
+          Resource: '*'
       Events:
         GetUserApi:
           Type: Api
           Properties:
             Path: /user/{userid}
             Method: get
-      CodeUri: s3://sam-rest.api/ca90dc39276f5b2aabbe6abddbe81582
-  PostUser:
+      CodeUri: s3://sam-rest.api-iam-obj/fa752c80c2c822488057d5941669f454
+  PostUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: post.handler
-      Policies: AmazonDynamoDBFullAccess
+      Policies:
+      - Statement:
+        - Sid: dynamoDBPostItemSAMRestAPI
+          Effect: Allow
+          Action:
+          - dynamodb:PutItem
+          Resource: '*'
       Events:
         PostUserApi:
           Type: Api
           Properties:
             Path: /user/{userid}
             Method: post
-      CodeUri: s3://sam-rest.api/ca90dc39276f5b2aabbe6abddbe81582
-  DeleteUser:
+      CodeUri: s3://sam-rest.api-iam-obj/fa752c80c2c822488057d5941669f454
+  DeleteUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: delete.handler
@@ -56,4 +68,4 @@ Resources:
           Properties:
             Path: /user/{userid}
             Method: delete
-      CodeUri: s3://sam-rest.api/ca90dc39276f5b2aabbe6abddbe81582
+      CodeUri: s3://sam-rest.api-iam-obj/fa752c80c2c822488057d5941669f454

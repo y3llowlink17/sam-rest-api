@@ -15,7 +15,7 @@ Resources:
   Table:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: sam-rest-api
+      TableName: sam-rest-api-TestPolicy
       PrimaryKey:
         Name: userid
         Type: String
@@ -23,11 +23,18 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
 
-  GetUser:
+  GetUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: get.handler
-      Policies: AmazonDynamoDBReadOnlyAccess  # IAM policy document object | SAM policy template # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#properties
+      # Policies: AmazonDynamoDBReadOnlyAccess  # AWS Managed Policy # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#properties
+      Policies:
+      - Statement:
+        - Sid: dynamoDBGetItemSAMRestAPI  # inline policy
+          Effect: Allow
+          Action:
+          - dynamodb:GetItem
+          Resource: '*'
       Events:
         GetUserApi:
           Type: Api
@@ -35,11 +42,18 @@ Resources:
             Path: /user/{userid}
             Method: get
 
-  PostUser:
+  PostUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: post.handler
-      Policies: AmazonDynamoDBFullAccess
+      # Policies: AmazonDynamoDBFullAccess  # AWS Managed Policy
+      Policies:
+      - Statement:
+        - Sid: dynamoDBPostItemSAMRestAPI   # inline policy
+          Effect: Allow
+          Action: 
+          - dynamodb:PutItem
+          Resource: '*'
       Events:
         PostUserApi:
           Type: Api
@@ -47,7 +61,7 @@ Resources:
             Path: /user/{userid}
             Method: post
 
-  DeleteUser:
+  DeleteUserTestPolicy:
     Type: AWS::Serverless::Function
     Properties:
       Handler: delete.handler
